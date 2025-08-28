@@ -26,7 +26,12 @@ const mongoose = require("mongoose");
 const app = express();
 
 // ✅ Middleware
-app.use(cors());
+app.use(cors({
+  origin: "*",           // Allow requests from any origin
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true      // Allow cookies if needed
+}));
 app.use(express.json());
 
 // ✅ MongoDB Atlas connection
