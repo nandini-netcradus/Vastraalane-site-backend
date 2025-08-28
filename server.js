@@ -25,12 +25,28 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-// ✅ Middleware
+const allowedOrigins = [
+  'http://localhost:3000', // local dev
+  'https://vastraalane-site-frontend-hesgjnlzi-nandinis-projects-1bbfe16e.vercel.app' // deployed frontend
+];
+
 app.use(cors({
-  origin: "https://vastraalane-site-frontend-at0mnp8ha-nandinis-projects-1bbfe16e.vercel.app",
-  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
-  credentials: true
+  origin: function(origin, callback){
+    // allow requests with no origin (like Postman)
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true // if you’re sending cookies or auth headers
 }));
+
+
+// ✅ Handle preflight requests for all routes
+// app.options("*", cors());
+
 app.use(express.json());
 
 // ✅ MongoDB Atlas connection
@@ -48,10 +64,21 @@ const profileRoutes = require("./routes/profileRoutes");
 const authRoutes = require("./routes/authRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 
+function authMiddleware(req, res, next) {
+  const authHeader = req.headers.authorization;
+  console.log(authHeader,"auth");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
 
+  const token = authHeader.split(" ")[1];
+  // TODO: verify JWT or token
+  req.user = { id: "demoUser" };
+  next();
+}
 // ✅ Routes usage
 app.use("/api/users", userRoutes);       
-app.use("/api/wishlist", wishlistRoutes); 
+app.use("/api/wishlist", authMiddleware, wishlistRoutes); 
 app.use("/api/test", testRoutes);
 app.use("/profile", profileRoutes);
 app.use("/api/auth", authRoutes);
