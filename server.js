@@ -27,10 +27,9 @@ const app = express();
 
 // ✅ Middleware
 app.use(cors({
-  origin: "*",           // Allow requests from any origin
+  origin: "https://vastraalane-site-frontend-at0mnp8ha-nandinis-projects-1bbfe16e.vercel.app",
   methods: ["GET","POST","PUT","DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true      // Allow cookies if needed
+  credentials: true
 }));
 app.use(express.json());
 
