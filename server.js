@@ -27,7 +27,9 @@ const app = express();
 
 const allowedOrigins = [
   'http://localhost:3000', // local dev
-  'https://vastraalane-site-frontend.vercel.app' // deployed frontend
+  'https://vastraalane-site-frontend.vercel.app', // deployed frontend
+  'https://www.vastraalane.com'
+
 ];
 
 app.use(cors({
