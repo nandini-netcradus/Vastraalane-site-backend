@@ -80,7 +80,7 @@ function authMiddleware(req, res, next) {
 }
 // ✅ Routes usage
 app.use("/api/users", userRoutes);       
-app.use("/api/wishlist", authMiddleware, wishlistRoutes); 
+app.use("/api/wishlist", wishlistRoutes); 
 app.use("/api/test", testRoutes);
 app.use("/profile", profileRoutes);
 app.use("/api/auth", authRoutes);
