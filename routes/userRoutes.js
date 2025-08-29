@@ -19,12 +19,12 @@ const userController = require("../controllers/userController");
 router.get("/:id/address", userController.getAddress);
 
 // Update/Add shipping address
-router.put("/:id/address", userController.updateAddress);
+router.put("/:id/address/edit", userController.updateAddress);
 
 //Add new 
 router.post("/:userId/address", userController.addAddress);
 
 // Add delete 
-// router.delete("/:id/address/:addressId", userController.deleteAddress);
+router.delete("/:id/address", userController.deleteAddress);
 
 module.exports = router;

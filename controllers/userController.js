@@ -15,10 +15,11 @@ exports.getUser = async (req, res) => {
 exports.getAddress = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
+    // console.log(user,'user in get address');
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Always return an object with shippingAddress key
-    res.json({ shippingAddress: user.shippingAddress || null });
+    res.json({ shippingAddress: user.shippingAddress|| null });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -55,6 +56,7 @@ exports.updateAddress = async (req, res) => {
     
 
 exports.addAddress = async (req, res) => {
+  // console.log(req.params);
   const { userId } = req.params;
   const {
     fullName,
@@ -96,3 +98,21 @@ exports.addAddress = async (req, res) => {
   }
 };
 
+exports.deleteAddress = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    // console.log(user,'user in get address');
+    if (!user) return res.status(404).json({ message: "User not found" });
+    user.shippingAddress = undefined; 
+    await user.save();
+
+
+    // Always return an object with shippingAddress key
+    res.status(200).json({
+      message: "Shipping address saved successfully",
+      shippingAddress: null
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
